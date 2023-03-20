@@ -1,7 +1,7 @@
-package com.pfcti.springdata.repository;
+package com.pfcti.spring_data.repository;
 
-import com.pfcti.springdata.model.Direccion;
-import com.pfcti.springdata.model.Inversion;
+import com.pfcti.spring_data.model.Direccion;
+import com.pfcti.spring_data.model.Inversion;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface InversionRepository extends JpaRepository<Inversion, Integer> {

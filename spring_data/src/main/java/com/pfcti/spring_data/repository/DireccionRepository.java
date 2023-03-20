@@ -1,7 +1,7 @@
-package com.pfcti.springdata.repository;
+package com.pfcti.spring_data.repository;
 
-import com.pfcti.springdata.model.Cuenta;
-import com.pfcti.springdata.model.Direccion;
+import com.pfcti.spring_data.model.Cuenta;
+import com.pfcti.spring_data.model.Direccion;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DireccionRepository extends JpaRepository<Direccion, Integer> {
