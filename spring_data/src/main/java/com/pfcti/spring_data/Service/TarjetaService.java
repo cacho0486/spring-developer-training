@@ -17,7 +17,7 @@ public class TarjetaService {
 
     public void actualizarEstadoTarjeta(TarjetaDTO tarjetaDto){
         Tarjeta tarjeta = new Tarjeta();
-        tarjeta.setId(tarjetaDto.getEstado());
+        tarjeta.setEstado(tarjetaDto.getEstado());
         TarjetaRepository.save(tarjeta);
     }
 }
