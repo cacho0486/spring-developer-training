@@ -44,7 +44,7 @@ public class ClienteSpecification {
     }
 
     private Specification<Cliente> paisNacimientoCriteria(ClienteDTO clienteDto){
-        return like("paisNacimiento", clienteDto.getPaisNacimiento());
+        return like("pais_Nacimiento", clienteDto.getPais_Nacimiento());
     }
 
     public Specification<Cliente> buildFilter(ClienteDTO clienteDto){

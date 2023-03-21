@@ -59,21 +59,18 @@ private ClienteSpecification clienteSpecification;
         clienteRepository.deleteById(clienteId);
     }
 /*
-    public List<ClienteDTO> obtenerClientesPorCodigoISOPaisYCuentasActivas(String codigoISOPais){
-        List<ClienteDTO> resultadoClientesDto = new ArrayList<>();
-        List<Cliente> clientes = clienteRepository.findClientesByPais_NacimientoAndCuentas_EstadoIsTrue(codigoISOPais);
-        clientes.forEach(cliente -> {
-            ClienteDTO clienteDto = new ClienteDTO();
-            clienteDto.setId(cliente.getId());
-            clienteDto.setApellidos(cliente.getApellidos());
-            clienteDto.setNombre(cliente.getNombre());
-            clienteDto.setCedula(cliente.getCedula());
-            clienteDto.setPaisNacimiento(cliente.getPais_Nacimiento());
-            resultadoClientesDto.add(clienteDto);
-            System.out.println(clienteDto);
-        });
-        return resultadoClientesDto;
+  public List<ClienteDTO> obtenerClientesPorCodigoISOPaisYCuentasActivas(String codigoIsoPais){
+        List<ClienteDTO> result = new ArrayList<>();
+        var clienteEntities = clienteRepository.findClientesByPaisNacimientoAndCuentas_EstadoIsTrue(codigoIsoPais);
+        clienteEntities.forEach(entity ->
+                {
+                    var clienteDto = fromClienteToDto(entity);
+                    result.add(clienteDto);
+                }
+        );
+        return result;
     }
+
 
 /*
     public List<Cliente> buscarClientesPorApellido(String apellidos){

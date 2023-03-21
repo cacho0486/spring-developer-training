@@ -25,4 +25,7 @@ public class Cliente {
     private List<Direccion> direcciones;
     @OneToMany(mappedBy = "cliente")
     private List<Cuenta> Cuentas;
+
+    @OneToMany(mappedBy = "cliente")
+    private List<Tarjeta> tarjetas;
 }
