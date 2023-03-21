@@ -83,4 +83,21 @@ class ClienteServiceTest {
         assertEquals("ROBERTOTEST", clienteDtoBaseUpdated.getNombre());
         assertEquals("PEREZTEST", clienteDtoBaseUpdated.getApellidos());
     }
+
+    @Test
+    void obtenerClientesPorCodigoISOPaisYCuentasActivas() {
+        List<ClienteDTO> clientesDto = clienteService.obtenerClientesPorCodigoISOPaisYCuentasActivas("CR");
+        clientesDto.forEach(clienteDto -> {System.out.println("Cuentas Activas" + clienteDto);});
+        assertEquals(1, clientesDto.size());
+    }
+
+    @Test
+    void buscarClientesDinamicamentePorCriterio() {
+        ClienteDTO clienteDto = new ClienteDTO();
+        clienteDto.setApellidos("SANCHEZ");
+        clienteDto.setNombre("RAUL");
+        List<ClienteDTO> resultadoCriteriosConDatosDTO = clienteService.buscarClientesDinamicamentePorCriterio(clienteDto);
+        resultadoCriteriosConDatosDTO.forEach(clienteDtoResultado -> {System.out.println("ClienteDto es:"+ clienteDtoResultado);});
+        assertEquals(1,resultadoCriteriosConDatosDTO.size());
+    }
 }

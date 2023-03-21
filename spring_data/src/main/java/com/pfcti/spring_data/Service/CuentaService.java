@@ -6,6 +6,7 @@ import com.pfcti.spring_data.model.Cliente;
 
 import com.pfcti.spring_data.model.Cuenta;
 import com.pfcti.spring_data.repository.CuentaRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class CuentaService {
     private CuentaRepository cuentaRepository;
 

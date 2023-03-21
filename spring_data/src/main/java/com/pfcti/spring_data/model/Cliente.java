@@ -20,8 +20,9 @@ public class Cliente {
     @Column(columnDefinition = "varchar(15)")
     private String cedula;
     private String telefono;
-    @Column(length = 30)
-    private String Pais;
+    private String pais_Nacimiento;
     @OneToMany(mappedBy = "cliente")
     private List<Direccion> direcciones;
+    @OneToMany(mappedBy = "cliente")
+    private List<Cuenta> Cuentas;
 }
