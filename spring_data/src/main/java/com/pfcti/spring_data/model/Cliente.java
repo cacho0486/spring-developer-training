@@ -20,12 +20,15 @@ public class Cliente {
     @Column(columnDefinition = "varchar(15)")
     private String cedula;
     private String telefono;
-    private String pais_Nacimiento;
+    private String paisNacimiento;
     @OneToMany(mappedBy = "cliente")
     private List<Direccion> direcciones;
     @OneToMany(mappedBy = "cliente")
-    private List<Cuenta> Cuentas;
+    private List<Cuenta> cuentas;
 
     @OneToMany(mappedBy = "cliente")
     private List<Tarjeta> tarjetas;
+
+    @OneToMany(mappedBy = "cliente")
+    private List<Inversion> inversiones;
 }

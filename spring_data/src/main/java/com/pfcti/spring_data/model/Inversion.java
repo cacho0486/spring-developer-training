@@ -6,13 +6,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "inversion")
 public class Inversion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String numero;
     private String tipo;
+
+    private Boolean estado;
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Cliente cliente;

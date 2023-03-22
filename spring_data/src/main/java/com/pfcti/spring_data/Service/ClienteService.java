@@ -1,9 +1,13 @@
 package com.pfcti.spring_data.Service;
 
 import com.pfcti.spring_data.criteria.ClienteSpecification;
-import com.pfcti.spring_data.dto.ClienteDTO;
+import com.pfcti.spring_data.dto.*;
 import com.pfcti.spring_data.model.Cliente;
-import com.pfcti.spring_data.repository.ClienteRepository;
+import com.pfcti.spring_data.model.Cuenta;
+import com.pfcti.spring_data.model.Inversion;
+import com.pfcti.spring_data.model.Tarjeta;
+import com.pfcti.spring_data.repository.*;
+import jakarta.persistence.Tuple;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -14,69 +18,102 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 @Transactional
+@AllArgsConstructor
 public class ClienteService {
-   ClienteRepository clienteRepository;
+    private ClienteRepository clienteRepository;
+    private CuentaRepository cuentaRepository;
+    private DireccionRepository direccionRepository;
+    private InversionRepository inversionRepository;
+    private TarjetaRepository tarjetaRepository;
 
-private ClienteSpecification clienteSpecification;
-
-    public void insertaCliente(ClienteDTO clienteDto) {
+    private ClienteSpecification clienteSpecification;
+    public void insertarCliente(ClienteDTO clienteDto){
         Cliente cliente = new Cliente();
         cliente.setApellidos(clienteDto.getApellidos());
         cliente.setNombre(clienteDto.getNombre());
         cliente.setCedula(clienteDto.getCedula());
         cliente.setTelefono(clienteDto.getTelefono());
         clienteRepository.save(cliente);
-
     }
 
-    public ClienteDTO obtenerCliente (int idCliente) {
-        Cliente cliente = clienteRepository.findById(idCliente)
-                .orElseThrow(
-                        () -> {throw new RuntimeException("Cliente no existe");});
-
-        ClienteDTO clienteDto = new ClienteDTO();
-        clienteDto.setId(cliente.getId());
-        clienteDto.setApellidos(cliente.getApellidos());
-        clienteDto.setNombre(cliente.getNombre());
-        clienteDto.setCedula(cliente.getCedula());
-
-        return clienteDto;
-    }
-
-    public void actualizarCliente(ClienteDTO clienteDto){
+    public void actualizarCliente(ClienteDTO clienteDTO){
         Cliente cliente = new Cliente();
-        cliente.setId(clienteDto.getId());
-        cliente.setNombre(clienteDto.getNombre());
-        cliente.setApellidos(clienteDto.getApellidos ());
-        cliente.setCedula(clienteDto.getCedula());
-        cliente.setTelefono(clienteDto.getTelefono());
+        cliente.setId(clienteDTO.getId());
+        cliente.setNombre(clienteDTO.getNombre());
+        cliente.setApellidos(clienteDTO.getApellidos());
+        cliente.setCedula(clienteDTO.getCedula());
+        cliente.setTelefono(clienteDTO.getTelefono());
         clienteRepository.save(cliente);
     }
 
-    public void eliminarCliente(Integer clienteId){
-        clienteRepository.deleteById(clienteId);
-    }
-/*
-  public List<ClienteDTO> obtenerClientesPorCodigoISOPaisYCuentasActivas(String codigoIsoPais){
-        List<ClienteDTO> result = new ArrayList<>();
-        var clienteEntities = clienteRepository.findClientesByPaisNacimientoAndCuentas_EstadoIsTrue(codigoIsoPais);
-        clienteEntities.forEach(entity ->
-                {
-                    var clienteDto = fromClienteToDto(entity);
-                    result.add(clienteDto);
-                }
-        );
-        return result;
+    public void eliminarCliente(int id){
+        cuentaRepository.deleteAllByCliente_Id(id);
+        direccionRepository.deleteAllByCliente_Id(id);
+        cuentaRepository.deleteAllByCliente_Id(id);
+        tarjetaRepository.deleteAllByCliente_Id(id);
+        clienteRepository.deleteById(id);
     }
 
+    public ClienteDTO obtenerCliente(int id){
+        ClienteDTO clienteDTO = new ClienteDTO();
+        Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> {throw new RuntimeException("Cliente no existe");});
+        clienteDTO.setNombre(cliente.getNombre());
+        clienteDTO.setApellidos(cliente.getApellidos());
+        clienteDTO.setTelefono(cliente.getTelefono());
+        clienteDTO.setCedula(cliente.getCedula());
+        return clienteDTO;
+    }
 
-/*
-    public List<Cliente> buscarClientesPorApellido(String apellidos){
+    public List<ClienteDTO> obtenerClientesPorCodigoISOPaisYCuentasActivas(String codigoISOPais){
+        List<ClienteDTO> resultadoClientesDto = new ArrayList<>();
+        List<Cliente> clientes = clienteRepository.findClientesByPaisNacimientoAndCuentas_EstadoIsTrue(codigoISOPais);
+        clientes.forEach(cliente -> {
+            ClienteDTO clienteDto = new ClienteDTO();
+            clienteDto.setId(cliente.getId());
+            clienteDto.setApellidos(cliente.getApellidos());
+            clienteDto.setNombre(cliente.getNombre());
+            clienteDto.setCedula(cliente.getCedula());
+            clienteDto.setPaisNacimiento(cliente.getPaisNacimiento());
+            resultadoClientesDto.add(clienteDto);
+            System.out.println(clienteDto);
+        });
+        return resultadoClientesDto;
+    }
+
+    public List<Cliente> buscarPorApellido(String apellidos){
         return clienteRepository.buscarPorApellidos(apellidos);
     }
-    */
+
+    public List<ClienteDTO> buscarClientesPorApellidoNativo(String apellidos){
+        List<ClienteDTO> clienteDtos = new ArrayList<>();
+        List<Tuple> tuples = clienteRepository.buscarPorApellidosNativo(apellidos);
+        tuples.forEach(tuple -> {
+            ClienteDTO clienteDto = new ClienteDTO();
+            clienteDto.setApellidos((String) tuple.get("apellidos"));
+            clienteDto.setNombre((String) tuple.get("nombre"));
+            clienteDto.setCedula((String) tuple.get("cedula"));
+            clienteDtos.add(clienteDto);
+            System.out.println(tuple.get("apellidos"));
+        });
+        return clienteDtos;
+    }
+
+    public List<ClienteDTO> obtenerClientesPorCodigoISOPaisYTarjetasInactivas(String codigoISOPais){
+        List<ClienteDTO> resultadoClientesDto = new ArrayList<>();
+        List<Cliente> clientes = clienteRepository.findClientesByPaisNacimientoNotContainsAndTarjetas_EstadoIsFalse(codigoISOPais);
+        clientes.forEach(cliente -> {
+            ClienteDTO clienteDto = new ClienteDTO();
+            clienteDto.setId(cliente.getId());
+            clienteDto.setApellidos(cliente.getApellidos());
+            clienteDto.setNombre(cliente.getNombre());
+            clienteDto.setCedula(cliente.getCedula());
+            clienteDto.setPaisNacimiento(cliente.getPaisNacimiento());
+            resultadoClientesDto.add(clienteDto);
+            System.out.println(clienteDto);
+        });
+        return resultadoClientesDto;
+    }
 
     public List<ClienteDTO> buscarClientesDinamicamentePorCriterio(ClienteDTO clienteDtoFilter){
         return clienteRepository.findAll(clienteSpecification.buildFilter(clienteDtoFilter))
@@ -89,5 +126,50 @@ private ClienteSpecification clienteSpecification;
         return clienteDto;
     }
 
+    private TarjetaDTO fromTarjetaToDto(Tarjeta tarjeta){
+        TarjetaDTO tarjetaDto = new TarjetaDTO();
+        BeanUtils.copyProperties(tarjeta, tarjetaDto);
+        return tarjetaDto;
+    }
 
+    private InversionDTO fromInversionToDto(Inversion inversion){
+        InversionDTO inversionDTO = new InversionDTO();
+        BeanUtils.copyProperties(inversion, inversionDTO);
+        return inversionDTO;
+    }
+
+    private CuentaDTO fromCuentaToDto(Cuenta cuenta){
+        CuentaDTO cuentaDTO = new CuentaDTO();
+        BeanUtils.copyProperties(cuenta, cuentaDTO);
+        return cuentaDTO;
+    }
+
+    public ProductosDTO obtenerProductosPorCliente(Integer id){
+        ProductosDTO productosDTO = new ProductosDTO();
+        List<TarjetaDTO> tarjetas = new ArrayList<>();
+        tarjetaRepository.findTarjetasByCliente_IdAndEstadoIsTrue(id).forEach(tarjeta -> {
+            TarjetaDTO tarjetaDTO;
+            tarjetaDTO = fromTarjetaToDto(tarjeta);
+            tarjetas.add(tarjetaDTO);
+        });
+        productosDTO.setTarjetas(tarjetas);
+
+        List<InversionDTO> inversiones = new ArrayList<>();
+        inversionRepository.findInversionsByCliente_IdAndEstadoIsTrue(id).forEach(inversion -> {
+            InversionDTO inversionDTO;
+            inversionDTO = fromInversionToDto(inversion);
+            inversiones.add(inversionDTO);
+        });
+        productosDTO.setInversiones(inversiones);
+
+        List<CuentaDTO> cuentas = new ArrayList<>();
+        cuentaRepository.findCuentasByCliente_IdAndEstadoIsTrue(id).forEach(cuenta -> {
+            CuentaDTO cuentaDTO;
+            cuentaDTO = fromCuentaToDto(cuenta);
+            cuentas.add(cuentaDTO);
+        });
+        productosDTO.setCuentas(cuentas);
+
+        return productosDTO;
+    }
 }

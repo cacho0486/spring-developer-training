@@ -33,18 +33,19 @@ public class CuentaSpecification {
                 (root, query, criteriaBuilder)
                         -> criteriaBuilder.isTrue(root.get(fieldName));
     }
-    private Specification<Cuenta> estadoCriteria(CuentaDTO cuentaDto){
-        return isTrue("estado", cuentaDto.getEstado());
-    }
-
     private Specification<Cuenta> numeroCriteria(CuentaDTO cuentaDto){
-        return equals("numero", cuentaDto.getNumero());
+
+        return like("numero", cuentaDto.getNumero());
     }
 
     private Specification<Cuenta> tipoCriteria(CuentaDTO cuentaDto){
-        return equals("tipo", cuentaDto.getTipo());
+
+        return like("tipo", cuentaDto.getTipo());
     }
 
+    private Specification<Cuenta> estadoCriteria(CuentaDTO cuentaDto){
+        return isTrue("estado", cuentaDto.getEstado());
+    }
 
     public Specification<Cuenta> buildFilter(CuentaDTO cuentaDto){
         System.out.println("Terms of Criteria:" + cuentaDto);

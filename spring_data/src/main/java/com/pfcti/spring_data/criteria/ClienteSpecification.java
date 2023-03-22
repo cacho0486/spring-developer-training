@@ -27,7 +27,7 @@ public class ClienteSpecification {
         }
     }
 
-    private Specification<Cliente> apellidoCriteria(ClienteDTO clienteDto){
+    private Specification<Cliente> apellidosCriteria(ClienteDTO clienteDto){
         return like("apellidos", clienteDto.getApellidos());
     }
 
@@ -44,17 +44,16 @@ public class ClienteSpecification {
     }
 
     private Specification<Cliente> paisNacimientoCriteria(ClienteDTO clienteDto){
-        return like("pais_Nacimiento", clienteDto.getPais_Nacimiento());
+        return like("paisNacimiento", clienteDto.getPaisNacimiento());
     }
 
     public Specification<Cliente> buildFilter(ClienteDTO clienteDto){
         System.out.println("Terms of Criteria:" + clienteDto);
         return Specification
-                .where(apellidoCriteria(clienteDto))
+                .where(apellidosCriteria(clienteDto))
                 .and(nombreCriteria(clienteDto))
                 .and(cedulaCriteria(clienteDto))
                 .and(telefonoCriteria(clienteDto))
                 .and(paisNacimientoCriteria(clienteDto));
     }
 }
-

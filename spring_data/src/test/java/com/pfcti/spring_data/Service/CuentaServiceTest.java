@@ -1,22 +1,28 @@
 package com.pfcti.spring_data.Service;
 
+import com.pfcti.spring_data.dto.ClienteDTO;
 import com.pfcti.spring_data.dto.CuentaDTO;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
+@Slf4j
 class CuentaServiceTest {
     @Autowired
     private CuentaService cuentaService;
     @Test
     void buscarCuentasDinamicamentePorCriterio() {
-        CuentaDTO cuentaDto = new CuentaDTO();
-        //cuentaDto.setTipo("AHORROS");
-        cuentaDto.setEstado(true);
-        cuentaService.buscarCuentasDinamicamentePorCriterio(cuentaDto).forEach(
-                cuentaDtoResultado -> {System.out.println("Cuenta Resultado" + cuentaDtoResultado);});
-        assertEquals(1,1);
+        CuentaDTO cuentaDTO = new CuentaDTO();
+        cuentaDTO.setNumero("33333");
+        List<CuentaDTO> resultadoCriteriosConDatosDTO = cuentaService.buscarCuentasDinamicamentePorCriterio(cuentaDTO);
+        resultadoCriteriosConDatosDTO.forEach(cuentaDTOResultado -> {System.out.println("CuentaDTO es:"+ cuentaDTOResultado);});
+        assertEquals(1,resultadoCriteriosConDatosDTO.size());
     }
 }
