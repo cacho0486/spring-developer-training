@@ -1,23 +1,29 @@
 package com.pfcti.spring_data.springbeans;
+
+import com.pfcti.spring_data.Service.ClienteService;
 import com.pfcti.spring_data.dto.ClienteDTO;
 import com.pfcti.spring_data.repository.ClienteRepository;
-import com.pfcti.spring_data.Service.ClienteService;
 import com.pfcti.spring_data.springbeans.dto.ClienteQueryDto;
 import com.pfcti.spring_data.springbeans.dto.ClienteQueryType;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
-class AdministradorClientesTest {
+class AdministradorClientesConAutowiredYNameTest {
     @Autowired
     private ClienteService clienteService;
+    @Autowired
+    private AdministradorClientes defaultCedula;
 
+    @Autowired
+    @Qualifier("defaultNombre")
+    private AdministradorClientes administradorClientes;
     @Autowired
     ClienteRepository clienteRepository;
 
@@ -42,16 +48,21 @@ class AdministradorClientesTest {
         clienteDtos.forEach(clienteDto -> this.clienteService.insertarCliente(clienteDto));
     }
     @Test
-    void obtenerListaClientesPorCriterio() {
-        //Se instancia la clase, se pasa los elementos dependientes al constructor
-        AdministradorClientes administradorClientes = new AdministradorClientes(clienteRepository, ClienteQueryType.CEDULA);
-        administradorClientes.setClienteRepository(clienteRepository);
+    void obtenerListaClientesPorCriterioCedula() {
         ClienteQueryDto clienteQueryDto = new ClienteQueryDto();
         clienteQueryDto.setTipoBusqueda(ClienteQueryType.CEDULA);
         clienteQueryDto.setTextoBusqueda("1890000002");
         //Se invoca al método respectivo
+        List<ClienteDTO> clienteDtos = defaultCedula.obtenerListaClientesPorCriterio(clienteQueryDto);
+        Assertions.assertEquals(1, clienteDtos.size());
+    }
+
+    @Test
+    void obtenerListaClientesPorCriterioNombres(){
+        ClienteQueryDto clienteQueryDto = new ClienteQueryDto();
+        clienteQueryDto.setTextoBusqueda("Guerra");
         List<ClienteDTO> clienteDtos = administradorClientes.obtenerListaClientesPorCriterio(clienteQueryDto);
-        clienteDtos.forEach(clienteDtosResultado -> {System.out.println("clienteDtos es:"+ clienteDtosResultado);});
-        assertEquals(1, clienteDtos.size());
+        Assertions.assertEquals(1, clienteDtos.size());
+
     }
 }

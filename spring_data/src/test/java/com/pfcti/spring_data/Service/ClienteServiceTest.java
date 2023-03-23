@@ -122,4 +122,23 @@ class ClienteServiceTest {
         productos.getInversiones().forEach(productosDTO -> {System.out.println("Inversiones " + productosDTO);});
         assertEquals(1, productos.getCuentas().size());
     }
+
+    @Test
+    void insertarClienteValidate() {
+        ClienteDTO clienteDTO = new ClienteDTO();
+        clienteDTO.setApellidos("Gonzalez");
+        clienteDTO.setNombre(null);
+        clienteDTO.setCedula("401750695");
+        clienteDTO.setTelefono("88779087");
+        clienteService.insertarCliente(clienteDTO);
+        /*clienteList = entityManager.createQuery("SELECT c FROM Cliente c").getResultList();
+        System.out.println("listar despues de insertar: " + clienteList);
+        System.out.println("Cantidad de la lista: " + clienteList.size());
+        System.out.println("Apellidos: " + clienteList.get(clienteList.size()-1).getApellidos());
+        System.out.println("Nombre: " + clienteList.get(clienteList.size()-1).getNombre());
+        System.out.println("Telefono: " + clienteList.get(clienteList.size()-1).getTelefono());
+        System.out.println("Cedula: " + clienteList.get(clienteList.size()-1).getCedula());
+        assertFalse(clienteList.isEmpty());*/
+        assertEquals(1, 1);
+    }
 }
