@@ -1,4 +1,4 @@
-package com.pfcti.spring_data.Service;
+package com.pfcti.spring_data.service;
 
 import com.pfcti.spring_data.dto.TarjetaDTO;
 import lombok.extern.slf4j.Slf4j;

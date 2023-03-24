@@ -1,6 +1,6 @@
 package com.pfcti.spring_data.springbeans.business.impl;
 
-import com.pfcti.spring_data.Service.CuentaService;
+import com.pfcti.spring_data.service.CuentaService;
 import com.pfcti.spring_data.dto.CuentaDTO;
 import com.pfcti.spring_data.springbeans.business.BuscadorCuentas;
 import org.springframework.beans.factory.annotation.Autowired;

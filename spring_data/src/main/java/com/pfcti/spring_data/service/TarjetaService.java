@@ -1,5 +1,4 @@
-package com.pfcti.spring_data.Service;
-import com.pfcti.spring_data.dto.ClienteDTO;
+package com.pfcti.spring_data.service;
 import com.pfcti.spring_data.dto.TarjetaDTO;
 import com.pfcti.spring_data.model.Tarjeta;
 import com.pfcti.spring_data.repository.TarjetaRepository;

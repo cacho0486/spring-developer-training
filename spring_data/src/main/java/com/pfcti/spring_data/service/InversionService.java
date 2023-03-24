@@ -1,4 +1,4 @@
-package com.pfcti.spring_data.Service;
+package com.pfcti.spring_data.service;
 
 import com.pfcti.spring_data.repository.InversionRepository;
 import lombok.AllArgsConstructor;

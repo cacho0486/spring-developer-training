@@ -1,7 +1,7 @@
 package com.pfcti.spring_data.springbeans;
 import com.pfcti.spring_data.dto.ClienteDTO;
 import com.pfcti.spring_data.repository.ClienteRepository;
-import com.pfcti.spring_data.Service.ClienteService;
+import com.pfcti.spring_data.service.ClienteService;
 import com.pfcti.spring_data.springbeans.dto.ClienteQueryDto;
 import com.pfcti.spring_data.springbeans.dto.ClienteQueryType;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,9 +1,6 @@
-package com.pfcti.spring_data.Service;
+package com.pfcti.spring_data.service;
 
-import com.pfcti.spring_data.dto.ClienteDTO;
 import com.pfcti.spring_data.dto.CuentaDTO;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

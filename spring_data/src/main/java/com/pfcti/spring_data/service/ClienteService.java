@@ -1,4 +1,4 @@
-package com.pfcti.spring_data.Service;
+package com.pfcti.spring_data.service;
 
 import com.pfcti.spring_data.criteria.ClienteSpecification;
 import com.pfcti.spring_data.dto.*;
@@ -171,5 +171,18 @@ public class ClienteService {
         productosDTO.setCuentas(cuentas);
 
         return productosDTO;
+    }
+
+    public List<ClienteDTO> listarTodosLosClientes(){
+        List<ClienteDTO> clienteDtoList = new ArrayList<>();
+        clienteRepository
+                .findAll()
+                .stream()
+                .map(cliente -> {
+                    clienteDtoList.add(fromClienteToDto(cliente));
+                    return cliente;
+                })
+                .collect(Collectors.toList());
+        return clienteDtoList;
     }
 }

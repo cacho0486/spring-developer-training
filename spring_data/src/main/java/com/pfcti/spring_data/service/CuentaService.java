@@ -1,9 +1,8 @@
-package com.pfcti.spring_data.Service;
+package com.pfcti.spring_data.service;
 import com.pfcti.spring_data.criteria.CuentaSpecification;
 import com.pfcti.spring_data.dto.CuentaDTO;
 import com.pfcti.spring_data.model.Cuenta;
 import com.pfcti.spring_data.repository.*;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
