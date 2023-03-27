@@ -1,5 +1,4 @@
 package com.pfcti.spring_data.service;
-
 import com.pfcti.spring_data.criteria.ClienteSpecification;
 import com.pfcti.spring_data.dto.*;
 import com.pfcti.spring_data.model.Cliente;
@@ -10,6 +9,7 @@ import com.pfcti.spring_data.repository.*;
 import jakarta.persistence.Tuple;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @AllArgsConstructor
+@Slf4j
 public class ClienteService {
     private ClienteRepository clienteRepository;
     private CuentaRepository cuentaRepository;
@@ -184,5 +185,17 @@ public class ClienteService {
                 })
                 .collect(Collectors.toList());
         return clienteDtoList;
+    }
+
+    public io.spring.guides.gs_producing_web_service.Cliente obtenerClienteSoap(int idCliente){
+        Cliente cliente = clienteRepository.findById(idCliente).orElseThrow(() -> { throw new RuntimeException("Cliente no existe");});
+        io.spring.guides.gs_producing_web_service.Cliente clienteWs = new io.spring.guides.gs_producing_web_service.Cliente();
+        clienteWs.setId(cliente.getId());
+        clienteWs.setNombre(cliente.getNombre());
+        clienteWs.setTelefono(cliente.getTelefono());
+        clienteWs.setApellidos(cliente.getApellidos());
+        clienteWs.setCedula(cliente.getCedula());
+        clienteWs.setPaisNacimiento(cliente.getPaisNacimiento());
+        return clienteWs;
     }
 }

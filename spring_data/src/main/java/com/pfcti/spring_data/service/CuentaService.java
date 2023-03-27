@@ -1,8 +1,11 @@
 package com.pfcti.spring_data.service;
 import com.pfcti.spring_data.criteria.CuentaSpecification;
+import com.pfcti.spring_data.dto.ClienteDTO;
 import com.pfcti.spring_data.dto.CuentaDTO;
+import com.pfcti.spring_data.model.Cliente;
 import com.pfcti.spring_data.model.Cuenta;
 import com.pfcti.spring_data.repository.*;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -13,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @AllArgsConstructor
 @Slf4j
 public class CuentaService {
@@ -24,21 +28,64 @@ public class CuentaService {
                 .stream().map(this::fromCuentaToDto).collect(Collectors.toList());
     }
 
-     public List<CuentaDTO> buscarCuentasPorCliente(int idCliente) {
+    private CuentaDTO fromCuentaToDto(Cuenta cuenta){
+        CuentaDTO cuentaDTO = new CuentaDTO();
+        BeanUtils.copyProperties(cuenta, cuentaDTO);
+        return cuentaDTO;
+    }
+
+    public void insertarCuenta(CuentaDTO cuentaDTO){
+        Cuenta cuenta = new Cuenta();
+        cuenta.setNumero(cuentaDTO.getNumero());
+        cuenta.setTipo(cuentaDTO.getTipo());
+        cuenta.setEstado(cuentaDTO.getEstado());
+        cuentaRepository.save(cuenta);
+    }
+
+    public List<CuentaDTO> buscarCuentasPorCliente(int idCliente) {
         List<CuentaDTO> cuentasPorCliente = new ArrayList<>();
         cuentaRepository.findCuentasByCliente_IdAndEstadoIsTrue(idCliente)
                 .stream()
                 .map(cuenta -> {
                     cuentasPorCliente.add(fromCuentaToDto(cuenta));
-                  //  log.info("Cuenta de Cliente :{}", cuenta);
+                    log.info("Cuenta de Cliente :{}", cuenta);
                     return cuenta;}
                 ).collect(Collectors.toList());
         return cuentasPorCliente;
     }
 
-    private CuentaDTO fromCuentaToDto(Cuenta cuenta) {
-        CuentaDTO cuentaDto = new CuentaDTO();
-        BeanUtils.copyProperties(cuenta, cuentaDto);
-        return cuentaDto;
+    public void actualizarCuenta(CuentaDTO cuentaDTO){
+        Cuenta cuenta = new Cuenta();
+        cuenta.setId(cuentaDTO.getId());
+        cuenta.setNumero(cuentaDTO.getNumero());
+        cuenta.setTipo(cuentaDTO.getTipo());
+        cuenta.setEstado(cuentaDTO.getEstado());
+        cuentaRepository.save(cuenta);
+    }
+
+    public CuentaDTO obtenerCuenta(int id){
+        CuentaDTO cuentaDTO = new CuentaDTO();
+        Cuenta cuenta = cuentaRepository.findById(id).orElseThrow(() -> {throw new RuntimeException("Cuenta no existe");});
+        cuentaDTO.setId(cuenta.getId());
+        cuentaDTO.setEstado(cuenta.getEstado());
+        cuentaDTO.setTipo(cuenta.getTipo());
+        cuentaDTO.setNumero(cuenta.getNumero());
+        return cuentaDTO;
+    }
+
+    public void desactivarCuentasPorCliente_id(Integer id){
+        List<Cuenta> cuentasPorCliente = new ArrayList<>();
+        cuentasPorCliente = cuentaRepository.findCuentasByCliente_IdAndEstadoIsTrue(id);
+        cuentasPorCliente.forEach(cuenta -> {
+            cuenta.setEstado(false);
+            cuentaRepository.save(cuenta);
+        });
+    }
+
+    public CuentaDTO desactivarCuentaPorId(CuentaDTO cuentaDto){
+        Cuenta cuenta = cuentaRepository.findById(cuentaDto.getId()).orElseThrow(() -> {throw new RuntimeException("cuenta de Cliente No Existe");});
+        cuenta.setEstado(false);
+        cuentaRepository.save(cuenta);
+        return fromCuentaToDto(cuenta);
     }
 }
