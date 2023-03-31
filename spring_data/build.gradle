@@ -61,6 +61,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'wsdl4j:wsdl4j'
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+	implementation 'org.springframework.boot:spring-boot-starter-artemis'
+	implementation 'org.apache.activemq:artemis-jakarta-server'
+	implementation 'org.springframework.boot:spring-boot-starter-integration'
+
+	implementation 'org.springframework.security:spring-security-test'
 	jaxb("org.glassfish.jaxb:jaxb-xjc")
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	compileOnly 'org.projectlombok:lombok'
@@ -70,6 +75,11 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test:3.2.3.RELEASE'
+	implementation group: "com.twilio.sdk", name: "twilio", version: "9.2.0"
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 }
 
 tasks.named('test') {

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/api/client")
+@RequestMapping("/v1/api/cliente")
 @Slf4j
 public class ClienteApi {
     @Autowired
